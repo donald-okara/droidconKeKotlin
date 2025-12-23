@@ -59,6 +59,9 @@ kotlinStdlib = "2.1.21"
 kotlinTest = "2.1.21"
 runner = "1.6.2"
 core = "1.6.1"
+nav3Core = "1.0.0"
+lifecycleViewmodelNav3 = "2.10.0-rc01"
+kotlinxSerializationCore = "1.8.1"
 
 [libraries]
 android-appCompat = { module = "androidx.appcompat:appcompat", version.ref = "app_compat" }
@@ -79,6 +82,11 @@ android-test-idling = { module = "androidx.test.espresso:espresso-idling-resourc
 android-test-junit4 = { module = "androidx.test.ext:junit", version.ref = "junit"}
 androidx-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "splash" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
+
+androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "nav3Core" }
+androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "nav3Core" }
+androidx-lifecycle-viewmodel-navigation3 = { module = "androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "lifecycleViewmodelNav3" }
+
 androidx-lifecycle-viewmodel = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-runtimeCompose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
 
@@ -133,6 +141,10 @@ ktor-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = 
 ktor-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktor" }
 ktor-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktor" }
 ktor-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
+
+kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinxSerializationCore" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationCore" }
+
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase_bom"}
 firebase-messaging = { module = "com.google.firebase:firebase-messaging-ktx" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx" }
@@ -164,8 +176,9 @@ androidx-core = { group = "androidx.test", name = "core", version.ref = "core" }
 
 
 [bundles]
-compose = ["coil-compose", "coil-svg", "compose-activity", "compose-compiler", "compose-material3", "compose-materialIcons", "compose-runtimeLivedata", "compose-ui", "compose-ui-util", "compose-ui-tooling", "compose-ui-tooling-preview", "paging-compose", "compose-preview-customview", "compose-preview-customview-poolingcontainer", "compose-constraintlayout", "compose-lifecycle-runtime"]
-lifecycle = ["lifecycle-livedataKtx", "lifecycle-runtimeKtx", "lifecycle-viewmodel-compose"]
+compose = ["coil-compose", "coil-svg", "compose-activity", "compose-compiler", "compose-material3", "compose-materialIcons", "compose-runtimeLivedata", "compose-ui", "compose-ui-util", "compose-ui-tooling", "compose-ui-tooling-preview", "paging-compose", "compose-preview-customview", "compose-preview-customview-poolingcontainer", "compose-constraintlayout", "compose-lifecycle-runtime", "androidx-navigation3-runtime", "androidx-navigation3-ui",]
+serialization = ["kotlinx-serialization-core", "kotlinx-serialization-json"]
+lifecycle = ["lifecycle-livedataKtx", "lifecycle-runtimeKtx", "androidx-lifecycle-viewmodel-navigation3"]
 room = ["room-ktx", "room-paging", "room-runtime"]
 ktor = ["ktor-core", "ktor-android", "ktor-json", "ktor-content-negotiation", "ktor-auth", "ktor-logging", "ktor-okhttp"]
 firebase = ["firebase-messaging", "firebase-crashlytics", "firebase-analytics", "firebase-performance", "firebase-remote-config", "firebase-common"]

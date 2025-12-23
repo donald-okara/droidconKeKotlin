@@ -16,36 +16,47 @@
 package com.android254.presentation.common.navigation
 
 import androidx.annotation.DrawableRes
+import androidx.navigation3.runtime.NavKey
 import ke.droidcon.kotlin.presentation.R
+import kotlinx.serialization.Serializable
 
+@Serializable
 sealed class Screens(
     var route: String,
     @DrawableRes var icon: Int,
     var title: String,
-) {
+): NavKey {
+    @Serializable
     object Home : Screens("/home", R.drawable.home_icon, "Home")
 
+    @Serializable
     object Feed : Screens("/feed", R.drawable.feed_icon, "Feed")
 
+    @Serializable
     object Sessions : Screens("/sessions", R.drawable.sessions_icon, "Sessions")
 
+    @Serializable
     object About : Screens("/about", R.drawable.about_icon, "About")
 
+    @Serializable
     object Speakers : Screens("/speakers", R.drawable.droidcon_icon, "Speakers")
 
+    @Serializable
     object FeedBack : Screens("/feedback", R.drawable.droidcon_icon, "FeedBack")
 
+    @Serializable
     object SessionDetails :
         Screens("/sessionDetails/{sessionId}", R.drawable.droidcon_icon, "Session Details") {
         const val sessionIdNavigationArgument = "sessionId"
     }
 
+    @Serializable
     object SpeakerDetails :
         Screens("/speaker_details/{speakerName}", R.drawable.droidcon_icon, "Speaker Details")
 }
 
 val bottomNavigationDestinations =
-    listOf(
+    setOf(
         Screens.Home,
         Screens.Feed,
         Screens.Sessions,
