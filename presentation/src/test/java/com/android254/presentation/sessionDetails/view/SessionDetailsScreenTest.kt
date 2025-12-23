@@ -45,7 +45,7 @@ class SessionDetailsScreenTest {
 
     private val mockSavedStateHandle: SavedStateHandle =
         SavedStateHandle().apply {
-            set(Screens.SessionDetails.sessionIdNavigationArgument, sessionId)
+            set(Screens.SessionDetails(sessionId).sessionIdNavigationArgument, sessionId)
         }
 
     @get:Rule

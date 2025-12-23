@@ -16,6 +16,7 @@
 plugins {
     alias(libs.plugins.droidconke.android.library)
     alias(libs.plugins.droidconke.android.hilt)
+    alias(libs.plugins.kotlin.serialization)
     alias(notation = libs.plugins.compose.compiler)
     alias(libs.plugins.droidconke.android.library.compose)
     alias(libs.plugins.droidconke.android.library.jacoco)
