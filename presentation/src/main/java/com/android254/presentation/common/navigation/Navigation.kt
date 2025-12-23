@@ -16,6 +16,7 @@
 package com.android254.presentation.common.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -36,6 +37,12 @@ fun Navigation(
     updateBottomBarState: (Boolean) -> Unit,
     onActionClicked: () -> Unit = {},
 ) {
+    val navigationState = rememberNavigationState(
+        startRoute = Screens.Home, topLevelRoutes = bottomNavigationDestinations
+    )
+
+    val navigator = remember { NavigationController(navigationState) }
+
     NavHost(navController, startDestination = Screens.Home.route) {
         composable(Screens.Home.route) {
             updateBottomBarState(true)
@@ -83,12 +90,11 @@ fun Navigation(
         }
         composable(
             Screens.SessionDetails.route,
-            arguments =
-                listOf(
-                    navArgument(Screens.SessionDetails.sessionIdNavigationArgument) {
-                        type = NavType.StringType
-                    },
-                ),
+            arguments = listOf(
+                navArgument(Screens.SessionDetails.sessionIdNavigationArgument) {
+                    type = NavType.StringType
+                },
+            ),
         ) { backStackEntry ->
             updateBottomBarState(false)
             SessionDetailsRoute(
@@ -135,9 +141,7 @@ fun Navigation(
             Screens.SpeakerDetails.route,
             arguments = listOf(navArgument("speakerName") { type = NavType.StringType }),
         ) {
-            val speakerName =
-                it.arguments?.getString("speakerName")
-                    ?: throw IllegalStateException("Speaker data missing.")
+            val speakerName = it.arguments?.getString("speakerName") ?: throw IllegalStateException("Speaker data missing.")
             updateBottomBarState(false)
             SpeakerDetailsRoute(
                 name = speakerName,

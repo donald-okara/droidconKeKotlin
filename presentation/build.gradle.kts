@@ -57,6 +57,7 @@ dependencies {
     implementation(libs.lottie.compose)
     implementation(libs.accompanist.swiperefresh)
     implementation(libs.kotlin.coroutines.datetime)
+    implementation(libs.bundles.serialization)
 
     implementation(libs.firebase.messaging)
 
