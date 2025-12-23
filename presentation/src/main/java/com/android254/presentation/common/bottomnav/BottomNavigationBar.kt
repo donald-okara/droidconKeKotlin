@@ -26,24 +26,27 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.android254.presentation.common.navigation.NavigationController
+import com.android254.presentation.common.navigation.NavigationState
 import com.android254.presentation.common.navigation.Screens
 import com.android254.presentation.common.navigation.bottomNavigationDestinations
+import com.android254.presentation.common.navigation.rememberNavigationState
 import com.droidconke.chai.ChaiDCKE22Theme
 import com.droidconke.chai.chaiColorsPalette
 import com.droidconke.chai.components.ChaiTextLabelSmall
 
 @Composable
-fun BottomNavigationBar(navController: NavHostController) {
+fun BottomNavigationBar(
+    navController: NavigationController,
+    navigationState: NavigationState
+) {
     BottomAppBar(
         modifier =
             Modifier
@@ -51,22 +54,22 @@ fun BottomNavigationBar(navController: NavHostController) {
                 .padding(top = 1.dp),
         containerColor = MaterialTheme.chaiColorsPalette.bottomNavBackgroundColor,
     ) {
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentDestination = navBackStackEntry?.destination
+        val topLevelRoute = navigationState.topLevelRoute
+        val navBackStackEntry = navigationState.backStacks[topLevelRoute]?.last()
 
         bottomNavigationDestinations.forEach { destination ->
-            val selected =
-                currentDestination?.hierarchy?.any { it.route == destination.route } == true
+            val selected = destination == topLevelRoute
 
             BottomNavItem(
                 isSelected = selected,
                 destination = destination,
                 onClick = {
-                    navController.navigate(destination.route) {
-                        launchSingleTop = true
-                        restoreState = true
-                        popUpTo(Screens.Home.route)
-                    }
+                    navController.navigate(destination)
+//                    {
+//                        launchSingleTop = true
+//                        restoreState = true
+//                        popUpTo(Screens.Home.route)
+//                    }
                 },
             )
         }
@@ -123,6 +126,11 @@ fun RowScope.BottomNavItem(
 @Composable
 fun BottomNavigationBarPreview() {
     ChaiDCKE22Theme {
-        BottomNavigationBar(rememberNavController())
+        val navigationState = rememberNavigationState(
+            startRoute = Screens.Home, topLevelRoutes = bottomNavigationDestinations
+        )
+        val navController = remember { NavigationController(navigationState) }
+
+        BottomNavigationBar(navController, navigationState)
     }
 }

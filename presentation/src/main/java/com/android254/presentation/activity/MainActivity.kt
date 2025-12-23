@@ -46,6 +46,10 @@ import com.android254.presentation.auth.AuthViewModel
 import com.android254.presentation.auth.view.AuthDialog
 import com.android254.presentation.common.bottomnav.BottomNavigationBar
 import com.android254.presentation.common.navigation.Navigation
+import com.android254.presentation.common.navigation.NavigationController
+import com.android254.presentation.common.navigation.Screens
+import com.android254.presentation.common.navigation.bottomNavigationDestinations
+import com.android254.presentation.common.navigation.rememberNavigationState
 import com.droidconke.chai.ChaiDCKE22Theme
 import com.droidconke.chai.chaiColorsPalette
 import dagger.hilt.android.AndroidEntryPoint
@@ -107,15 +111,18 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainScreen() {
+    val navigationState = rememberNavigationState(
+        startRoute = Screens.Home, topLevelRoutes = bottomNavigationDestinations
+    )
+    val navController = remember { NavigationController(navigationState) }
     val authViewModel = hiltViewModel<AuthViewModel>()
-    val navController = rememberNavController()
     val bottomBarState = rememberSaveable { (mutableStateOf(true)) }
     var showAuthDialog by remember {
         mutableStateOf(false)
     }
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        bottomBar = { if (bottomBarState.value) BottomNavigationBar(navController) },
+        bottomBar = { if (bottomBarState.value) BottomNavigationBar(navController, navigationState) },
         containerColor = MaterialTheme.chaiColorsPalette.background,
     ) { padding ->
 
@@ -132,6 +139,7 @@ fun MainScreen() {
             }
             Navigation(
                 navController = navController,
+                navigationState = navigationState,
                 updateBottomBarState = { bottomBarState.value = it },
                 onActionClicked = {
                     showAuthDialog = !showAuthDialog

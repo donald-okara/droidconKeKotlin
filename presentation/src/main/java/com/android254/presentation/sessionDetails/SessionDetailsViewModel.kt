@@ -41,37 +41,38 @@ sealed interface SessionDetailsUiState {
 
 @HiltViewModel
 class SessionDetailsViewModel
-    @Inject
-    constructor(
-        private val sessionsRepo: SessionsRepo,
-        private val savedStateHandle: SavedStateHandle,
-    ) : ViewModel() {
-        private val sessionId = savedStateHandle.get<String>(Screens.SessionDetails.sessionIdNavigationArgument)
+@Inject
+constructor(
+    private val sessionsRepo: SessionsRepo,
+    private val savedStateHandle: SavedStateHandle,
+) : ViewModel() {
 
-        val uiState =
-            sessionsRepo.fetchSessionById(id = sessionId ?: "")
-                .map {
-                    if (it == null) {
-                        SessionDetailsUiState.Error(message = "Session Info not found")
-                    } else {
-                        SessionDetailsUiState.Success(it.toSessionDetailsPresentationModal())
-                    }
+    private val sessionId = savedStateHandle.get<String>("sessionId")
+
+    val uiState =
+        sessionsRepo.fetchSessionById(id = sessionId ?: "")
+            .map {
+                if (it == null) {
+                    SessionDetailsUiState.Error(message = "Session Info not found")
+                } else {
+                    SessionDetailsUiState.Success(it.toSessionDetailsPresentationModal())
                 }
-                .onStart { SessionDetailsUiState.Loading }
-                .catch { SessionDetailsUiState.Error(message = "An unexpected error occurred") }
-                .stateIn(
-                    scope = viewModelScope,
-                    started = SharingStarted.WhileSubscribed(5000L),
-                    initialValue = SessionDetailsUiState.Loading,
-                )
-
-        fun bookmarkSession(sessionId: String) =
-            viewModelScope.launch {
-                sessionsRepo.bookmarkSession(sessionId)
             }
+            .onStart { SessionDetailsUiState.Loading }
+            .catch { SessionDetailsUiState.Error(message = "An unexpected error occurred") }
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5000L),
+                initialValue = SessionDetailsUiState.Loading,
+            )
 
-        fun unBookmarkSession(sessionId: String) =
-            viewModelScope.launch {
-                sessionsRepo.unBookmarkSession(sessionId)
-            }
-    }
+    fun bookmarkSession(sessionId: String) =
+        viewModelScope.launch {
+            sessionsRepo.bookmarkSession(sessionId)
+        }
+
+    fun unBookmarkSession(sessionId: String) =
+        viewModelScope.launch {
+            sessionsRepo.unBookmarkSession(sessionId)
+        }
+}
