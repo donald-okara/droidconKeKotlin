@@ -91,7 +91,7 @@ import ke.droidcon.kotlin.presentation.R
 
 @Composable
 fun SessionDetailsRoute(
-    viewModel: SessionDetailsViewModel = hiltViewModel(),
+    viewModel: SessionDetailsViewModel,
     sessionId: String,
     onNavigationIconClick: () -> Unit,
 ) {
